@@ -8,19 +8,11 @@
 ID : admin
 PW : glowup1234!
 
-2. 환경 변수 (.env.local) 설정
-본 저장소를 클론한 후, 프로젝트 루트에 `.env.local` 파일을 생성하고 아래 값을 입력해주십시오.
-
-3. .env.local
-NEXT_PUBLIC_SUPABASE_URL=https://malthvilwgjbmasmcecr.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_I_faa9Fsli2NqwemfI8t4w_bGwAO_Gx
-
-4. 패키지 설치
+2. 패키지 설치
 npm install
 
-5. 로컬 개발 서버 실행
+3. 로컬 개발 서버 실행
 npm run dev
-
 
 #### 테스트 방법 ####
 npm test

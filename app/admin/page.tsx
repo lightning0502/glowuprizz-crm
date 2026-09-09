@@ -172,6 +172,17 @@ export default function AdminPage() {
             return;
         }
 
+        if (!file.name.toLowerCase().endsWith('.html')) {
+            alert("HTML 파일(.html)만 업로드할 수 있습니다!");
+
+            setFile(null);
+            const fileInput = document.getElementById("file-upload") as HTMLInputElement;
+            if (fileInput)
+                fileInput.value = "";
+
+            return;
+        }
+
         setIsLoading(true);
 
         const formData = new FormData();
