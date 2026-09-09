@@ -254,14 +254,7 @@ export default function AdminPage() {
         }
     };
 
-    const channelStats: Record<string, { views: number; leads: number }> = {
-        instagram: { views: 0, leads: 0 },
-        x: { views: 0, leads: 0 },
-        youtube: { views: 0, leads: 0 },
-        threads: { views: 0, leads: 0 },
-        unknown: { views: 0, leads: 0 },
-    };
-
+    // 캠페인별 통계 먼저 산출
     const campaignStats = campaignArray.map((campaign) => {
         const campViews = viewArray.filter((v) => v.campaign_id === campaign.id);
         const campLeads = leadArray.filter((l) => l.campaign_id === campaign.id);
@@ -276,22 +269,19 @@ export default function AdminPage() {
             x: { views: 0, leads: 0 },
             youtube: { views: 0, leads: 0 },
             threads: { views: 0, leads: 0 },
+            unknown: { views: 0, leads: 0 },
         };
 
         campViews.forEach((v) => {
             const ch = v.channel || "unknown";
-            if (channelStats[ch]) channelStats[ch].views += 1;
-            else channelStats["unknown"].views += 1;
-
             if (localChannelStats[ch]) localChannelStats[ch].views += 1;
+            else localChannelStats["unknown"].views += 1;
         });
 
         campLeads.forEach((l) => {
             const ch = l.channel || "unknown";
-            if (channelStats[ch]) channelStats[ch].leads += 1;
-            else channelStats["unknown"].leads += 1;
-
             if (localChannelStats[ch]) localChannelStats[ch].leads += 1;
+            else localChannelStats["unknown"].leads += 1;
         });
 
         return {
@@ -306,6 +296,17 @@ export default function AdminPage() {
             campLeads
         };
     });
+
+    // 전체 채널 성과는 산출된 campaignStats를 바탕으로 누적 집계
+    const channelStats = campaignStats.reduce((acc, camp) => {
+        Object.entries(camp.localChannelStats).forEach(([ch, stats]) => {
+            if (!acc[ch]) acc[ch] = { views: 0, leads: 0 };
+            acc[ch].views += stats.views;
+            acc[ch].leads += stats.leads;
+        });
+
+        return acc;
+    }, {} as Record<string, { views: number; leads: number }>);
 
     const modalCampaign = campaignStats.find(c => c.id === activeModalCampaignId);
 
