@@ -51,12 +51,12 @@ export async function POST(request: Request) {
             );
         }
 
-        // 동일 캠페인 내 연락처 중복 신청 체크
+        // 동일 캠페인 내 연락처 또는 이메일 중복 신청 체크
         const { data: existingLead, error: checkError } = await supabase
             .from("leads")
             .select("id")
             .eq("campaign_id", campaign_id)
-            .eq("phone", numericPhone)
+            .or(`phone.eq.${numericPhone},email.eq.${email}`)
             .maybeSingle();
 
         if (checkError) {
@@ -65,7 +65,7 @@ export async function POST(request: Request) {
 
         if (existingLead) {
             return NextResponse.json(
-                { error: "이미 해당 연락처로 신청이 완료된 캠페인입니다." },
+                { error: "이미 해당 연락처 또는 이메일로 신청이 완료된 캠페인입니다." },
                 { status: 400, headers: { "Access-Control-Allow-Origin": "*" } }
             );
         }
