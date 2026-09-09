@@ -231,7 +231,7 @@ export default function AdminPage() {
         if (!confirm("정말 로그아웃 하시겠습니까?")) return;
 
         try {
-            const res = await fetch("/api/logout", { method: "POST" });
+            const res = await fetch("/api/auth/logout", { method: "POST" });
             if (res.ok) {
                 router.push("/login");
             } else {

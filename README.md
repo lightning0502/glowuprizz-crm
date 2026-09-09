@@ -31,3 +31,6 @@ npm test
 - [아키텍처 의사결정 기록 (ADR)](./ADR.md)
 - [API 명세서](./API.md)
 - [데이터베이스 스키마](./DB_SCHEMA.sql)
+
+## Live Demo
+- 서비스 주소 : https://glowuprizz-crm.vercel.app/login
