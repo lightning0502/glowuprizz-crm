@@ -27,8 +27,8 @@ export async function POST(request: Request) {
             );
         }
 
-        // 하이픈, 공백, 한글 등 날리기
         const numericPhone = phone.replace(/[^0-9]/g, "");
+        const cleanEmail = email.trim().toLowerCase();
 
         if (name.length > 20) {
             return NextResponse.json({ error: "이름은 최대 20자까지만 입력 가능합니다." }, { status: 400, headers: { "Access-Control-Allow-Origin": "*" } });
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
         if (numericPhone.length > 20) {
             return NextResponse.json({ error: "연락처는 최대 20자리 숫자까지만 입력 가능합니다." }, { status: 400, headers: { "Access-Control-Allow-Origin": "*" } });
         }
-        if (email.length > 50) {
+        if (cleanEmail.length > 50) {
             return NextResponse.json({ error: "이메일은 최대 50자까지만 입력 가능합니다." }, { status: 400, headers: { "Access-Control-Allow-Origin": "*" } });
         }
 
@@ -51,28 +51,40 @@ export async function POST(request: Request) {
             );
         }
 
-        // 동일 캠페인 내 연락처 또는 이메일 중복 신청 체크
-        const { data: existingLead, error: checkError } = await supabase
+        // 전화번호 중복 조회
+        const { data: phoneLeads, error: phoneError } = await supabase
             .from("leads")
             .select("id")
             .eq("campaign_id", campaign_id)
-            .or(`phone.eq.${numericPhone},email.eq.${email}`)
-            .maybeSingle();
+            .eq("phone", numericPhone);
 
-        if (checkError) {
-            console.error("Duplicate check error:", checkError);
+        if (phoneError) {
+            console.error("Phone duplicate check error:", phoneError);
         }
 
-        if (existingLead) {
+        // 이메일 중복 조회
+        const { data: emailLeads, error: emailError } = await supabase
+            .from("leads")
+            .select("id")
+            .eq("campaign_id", campaign_id)
+            .eq("email", cleanEmail);
+
+        if (emailError) {
+            console.error("Email duplicate check error:", emailError);
+        }
+
+        // 둘 중 하나라도 존재하면 NG
+        if ((phoneLeads && phoneLeads.length > 0) || (emailLeads && emailLeads.length > 0)) {
             return NextResponse.json(
                 { error: "이미 해당 연락처 또는 이메일로 신청이 완료된 캠페인입니다." },
                 { status: 400, headers: { "Access-Control-Allow-Origin": "*" } }
             );
         }
 
+        // 정상 인서트, OK PASS!
         const { error } = await supabase
             .from("leads")
-            .insert([{ campaign_id, channel: validChannel, name, phone: numericPhone, email }]);
+            .insert([{ campaign_id, channel: validChannel, name, phone: numericPhone, email: cleanEmail }]);
 
         if (error) throw error;
 
