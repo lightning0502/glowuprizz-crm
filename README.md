@@ -1,36 +1,33 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## 개발자
+심태양 (010-8632-1386)
 
-## Getting Started
+## 프로젝트 과제 (리드마그넷 CRM 운영 시스템)
+운영자가 AI를 이용해 생성한 HTML 기반 신청 폼을 손쉽게 배포하고,
+인스타그램, X, 유튜브, 스레드 채널별 유입 성과(방문수, 순 방문자, 신청자, 전환율)를
+실시간으로 모니터링할 수 있는 CRM 운영 시스템입니다.
 
-First, run the development server:
+## 로그인 정보
+ID : admin
+PW : glowup1234!
 
-```bash
+## 환경 변수 (.env.local) 설정
+본 저장소를 클론한 후, 프로젝트 루트에 `.env.local` 파일을 생성하고 아래 값을 입력해주십시오.
+
+## .env.local
+NEXT_PUBLIC_SUPABASE_URL=https://malthvilwgjbmasmcecr.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_I_faa9Fsli2NqwemfI8t4w_bGwAO_Gx
+
+## 실행 방법
+# 1. 패키지 설치
+npm install
+
+# 2. 로컬 개발 서버 실행
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 테스트 방법
+npm test
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 프로젝트 문서
+- [아키텍처 의사결정 기록 (ADR)](./ADR.md)
+- [API 명세서](./API.md)
+- [데이터베이스 스키마](./DB_SCHEMA.sql)
